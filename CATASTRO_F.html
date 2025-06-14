@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Geovisor Sanchez</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol/6.5.0/ol.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ol/6.5.0/ol.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    header {
+      background-color: #004080;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 10px 0;
+      font-size: 2em;
+    }
+
+    header h2, header h3 {
+      margin: 5px 0;
+      font-weight: 400;
+    }
+
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 1.1em;
+    }
+
+    strong {
+      color: #004080;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    iframe {
+      width: 100%;
+      max-width: 100%;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .descarga-btn,
+    button {
+      background-color: #a49e9e;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 1em;
+      border-radius: 6px;
+      margin: 10px 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .descarga-btn:hover,
+    button:hover {
+      background-color: #218838;
+    }
+
+    #map {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      border: 1px solid #ccc;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #e0e0e0;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+
+
+<!-- Contenedor general del encabezado con estilo de recuadro -->
+
+ <!--COPIA DE ENCABEZADO -->
+
+<div style="background-color: #003366; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+
+  <!-- Encabezado con logo e información -->
+  <header style="width: 1200px; margin: auto; padding: 15px 20px; justify-content: center; display: flex;align-items: center ;">
+
+    <!-- Logo a la izquierda -->
+    <a href="https://www.ucuenca.edu.ec" target="_blank" rel="noopener noreferrer"> 
+<img src="data:image/jpeg;base64,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" 
+style="max-height: 250px; border-radius: 8px;"></a>
+
+    <!-- Textos a la derecha -->
+    <div style="color: white; padding: 15px 0px; color: #003366; flex: 1;">
+      <h1 style="color: white; margin: 5px 0; font-size: 1.8em;">UNIVERSIDAD DE CUENCA</h1>
+      <h2 style="color: white; margin: 5px 0; font-size: 1.2em;">MAESTRÍA EN GESTIÓN DE GEOINFORMACIÓN CON MENCIÓN EN CATASTRO MULTIPROPOSITO</h2>
+      <h3 style="color: white; margin: 5px 0; font-size: 1em;">DISEMINACIÓN DE DATOS Y MECANISMOS DE ENLACE</h3>
+    </div>
+
+  </header>
+
+
+</div>
+
+
+
+  <main>
+
+<!-- Textos centrado título -->
+ <div style="background-color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); color: #003366; max-width: 1200px; margin: 0 auto; text-align: center;">
+    <p style="margin: 5px 0; font-size: 1.1em">
+       <strong> GEOPORTAL DEL ÁREA URBANA DE CAMILO PONCE ENRÍQUEZ </strong></p>
+ </div>
+
+
+   <!-- Descripción de Pagina -->
+   
+<div style="display: flex; justify-content: center; margin-top: 40px;">
+  <div style="max-width: 1200px; background-color: white; padding: 30px; box-shadow: 0 0 15px rgba(0,0,0,0.15); border-radius: 12px; text-align: center; font-family: Arial, sans-serif; color: #333;">
+    <p style="font-size: 1.1em; border-radius: 12px; line-height: 1.6;">
+      Bienvenido al <strong>Geoportal del cantón Camilo Ponce Enríquez</strong>, una plataforma digital interactiva diseñada para la visualización, consulta y descarga de información geoespacial relevante del territorio cantonal. Este sistema permite acceder a datos actualizados sobre el catastro del área urbana.
+    </p>
+    <p style="font-size: 1.1em; line-height: 1.6;">
+      El objetivo principal de este geoportal es apoyar la toma de decisiones técnicas, administrativas y ciudadanas, promoviendo la transparencia, eficiencia y planificación territorial sostenible. Este sitio forma parte del proyecto desarrollado por la <strong>Maestría en Gestión de Geoinformación con Mención en Catastro Multipropósito</strong> de la <strong>Universidad de Cuenca</strong>, en colaboración con el <strong>Gobierno Autónomo Descentralizado Municipal del Cantón</strong>.
+    </p>
+  </div>
+</div>
+
+<br>
+
+
+<!-- TÍTULO DE CATASTRO URBANO -->
+<div style="background-color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 0px rgba(0,0,0,0.2); color: #003366; max-width: 1200px; margin: 0 auto; text-align: center;">
+  <p style="margin: 5px 0; font-size: 1.1em;">
+    <strong>CATASTRO URBANO DE CAMILO PONCE ENRÍQUEZ</strong>
+  </p>
+<br>
+
+
+  <!-- Contenedor con imagen y texto -->
+  <div style="display: flex; background: #cdbacd; border-radius: 12px; max-width: 1200px; margin: 0 auto; overflow: hidden;">
+
+    <!-- Imagen del mapa de predios a la izquierda -->
+    <a href="https://geoserver.idesinde.com:8443/geoserver/sanchez/wms?service=WMS&version=1.1.0&request=GetMap&layers=sanchez%3ACatastro%20de%20Camilo%20Ponce%20Enríquez&bbox=637394.6447999999%2C9659319.9428%2C640875.0%2C9664343.4738&width=532&height=768&srs=EPSG%3A32717&styles=&format=application/openlayers#toggle" target="_blank" rel="noopener noreferrer">
+      <img src="https://geoserver.idesinde.com:8443/geoserver/sanchez/wms?service=WMS&version=1.1.0&request=GetMap&layers=sanchez%3ACatastro%20de%20Camilo%20Ponce%20Enríquez&bbox=637394.6447999999%2C9659319.9428%2C640875.0%2C9664343.4738&width=532&height=768&srs=EPSG%3A32717&styles=&format=image%2Fpng" alt="Mapa de predios" style="height: 100%; display: block;">
+    </a>
+
+    <!-- Texto a la derecha con la misma altura -->
+    <div style="flex: 1; padding: 20px; display: flex; flex-direction: column; justify-content: center; background-color: #f8f8f8;">
+      <p style="margin: 5px 0;">La imagen vincula</p>
+      <p style="margin: 5px 0;">al geoserver del</p>
+      <p style="margin: 5px 0;">catastro urbano</p>
+      <p style="margin: 5px 0;">de Camilo Ponce Enríquez</p>
+    </div>
+
+  </div>
+</div>
+
+
+<br>
+
+
+   <!-- Enlace a QGIS Cloud -->
+<div style="background-color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); color: #003366; max-width: 1200px; margin: 0 auto; text-align: center;">
+     <p style="margin: 5px 0; font-size: 1.1em">   
+<strong>ACCESO A GEOPORTAL DE QGIS CLOUD</strong></p>
+   <p><iframe src="https://qgiscloud.com/DAYANA_SANCHEZ_VALDEZ/TIII/?l=CONSTRUCCIONES%2CPREDIOS%20-%20USOS&bl=mapnik&t=TIII&e=-8877617%2C-340933%2C-8877224%2C-340747"height="600" width="1200"></iframe></p>
+   </div>  
+        
+     <br>
+    <!-- Botones de descarga -->
+    <div style="background-color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); color: #003366; max-width: 1200px; margin: 0 auto; text-align: center;">
+     <p style="margin: 5px 0; font-size: 1.1em">
+        <strong>DESCARGA DE CAPAS EN FORMATO KML</strong></p>
+
+
+    <a href="https://geoserver.idesinde.com:8443/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&TypeName=sanchez:predio&outputformat=KML" target="blank" download>
+    <button onclick="color: a49e9e; descargar('sanchez:predio')">Descargar predios (KML)</button>
+
+    <a href="https://geoserver.idesinde.com:8443/geoserver/ows?service=wfs&version=2.0.0&request=GetFeature&TypeName=sanchez:construccion&outputformat=KML" target="blank" download>
+    <button onclick="descargar('sanchez:construccion')">Descargar construcciones (KML)</button>
+    </div>
+
+
+ <br>
+
+
+ <!-- Enlace a PDF -->
+    <div style="background-color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); color: #003366; max-width: 1200px; margin: 0 auto; text-align: center;">
+     <p style="margin: 5px 0; font-size: 1.1em">   
+     <strong>LÍMITES DEL CANTÓN CAMILO PONCE ENRÍQUEZ</strong></p>
+
+
+<br>
+
+    <iframe src="https://www.camiloponce.gob.ec/camilopo_camilop/images/baselegal/leydecreacion.pdf"height="600" width="1200"></iframe>
+
+</div>
+
+ <br>
+
+
+    <!-- MAPA INTERACTIVO CON OPENLAYERS -->
+    <div style="background-color: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); color: #003366; max-width: 1200px; margin: 0 auto; text-align: center;">
+     <p style="margin: 5px 0; font-size: 1.1em">  
+     <strong>MAPA INTERACTIVO CON OPENLAYERS</strong></p>
+   
+
+
+ 
+
+<!-- Contenedor del Mapa -->
+<div id="map" style="width: 100%; height: 500px; margin-top: 30px;"></div>
+
+
+<!-- Scripts de OpenLayers -->
+
+<script src="https://cdn.jsdelivr.net/npm/ol@latest/dist/ol.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@latest/ol.css">
+
+
+
+
+<script>
+  // Crear el mapa
+  const map = new ol.Map({
+    target: 'map',
+    layers: [
+      // Capa base OSM
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      }),
+
+      // Capa WMS - Predio
+      new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+          url: 'https://geoserver.idesinde.com:8443/geoserver/sanchez/wms',
+          params: {
+            'LAYERS': 'sanchez:predio',
+            'TILED': true,
+            'FORMAT': 'image/png',
+            'TRANSPARENT': true
+          },
+          serverType: 'geoserver'
+        })
+      }),
+
+      // Capa WMS - Construcción
+      new ol.layer.Tile({
+        source: new ol.source.TileWMS({
+          url: 'https://geoserver.idesinde.com:8443/geoserver/sanchez/wms',
+          params: {
+            'LAYERS': 'sanchez:construccion',
+            'TILED': true,
+            'FORMAT': 'image/png',
+            'TRANSPARENT': true
+          },
+          serverType: 'geoserver'
+        })
+      })
+    ],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([-79.747230, -3.061820]), // Aproximadamente Camilo Ponce Enríquez
+      zoom: 16
+    })
+
+
+
+
+  });
+</script>
+
+
+
+
+
+
+
+ </main>
+  
+
+ <!-- Footer -->
+
+ <footer>
+    © 2025  |  Elaborado por: Arq. Dayana Sánchez  
+<br>
+ Tutor: Ing. Izar Sinde
+  
+</footer>
+
+
+
+</body>
+</html>
